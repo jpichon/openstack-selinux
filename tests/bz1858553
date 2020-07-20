@@ -1,0 +1,1 @@
+type=AVC msg=audit(1595173011.584:8090): avc:  denied  { search } for  pid=8069 comm="vhost_reconn" name="vhost_sockets" dev="sda2" ino=1342177472 scontext=system_u:system_r:openvswitch_t:s0 tcontext=system_u:object_r:container_ro_file_t:s0 tclass=dir permissive=0
