@@ -1,0 +1,55 @@
+policy_module(os-ceilometer, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+
+attribute ceilometer_domain;
+
+ceilometer_domain_template(polling)
+
+type ceilometer_log_t;
+logging_log_file(ceilometer_log_t)
+
+type ceilometer_var_lib_t;
+files_type(ceilometer_var_lib_t)
+
+type ceilometer_unit_file_t;
+systemd_unit_file(ceilometer_unit_file_t)
+
+
+######################################
+#
+# Ceilometer general domain local policy
+#
+
+allow ceilometer_domain self:process signal_perms;
+allow ceilometer_domain self:fifo_file rw_fifo_file_perms;
+allow ceilometer_domain self:tcp_socket create_stream_socket_perms;
+allow ceilometer_domain self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(ceilometer_domain, ceilometer_log_t, ceilometer_log_t)
+manage_files_pattern(ceilometer_domain, ceilometer_log_t, ceilometer_log_t)
+logging_log_filetrans(ceilometer_domain, ceilometer_log_t, dir)
+
+manage_dirs_pattern(ceilometer_domain, ceilometer_var_lib_t, ceilometer_var_lib_t)
+manage_files_pattern(ceilometer_domain, ceilometer_var_lib_t, ceilometer_var_lib_t)
+files_var_lib_filetrans(ceilometer_domain, ceilometer_var_lib_t, dir)
+
+######################################
+#
+# Ceilometer polling local policy
+#
+
+gen_require(`
+  type proc_t;
+  type virt_var_run_t;
+  type virtd_t;
+')
+
+# OSPRH-3373
+allow ceilometer_polling_t proc_t:filesystem associate;
+allow ceilometer_polling_t virt_var_run_t:sock_file write;
+allow ceilometer_polling_t virtd_t:unix_stream_socket connectto;

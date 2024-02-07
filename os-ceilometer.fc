@@ -1,0 +1,7 @@
+/usr/bin/ceilometer-polling            --  gen_context(system_u:object_r:ceilometer_polling_exec_t,s0)
+
+/usr/lib/systemd/system/openstack-ceilometer-polling.* -- gen_context(system_u:object_r:ceilometer_unit_file_t,s0)
+
+/var/lib/ceilometer(/.*)?     gen_context(system_u:object_r:ceilometer_var_lib_t,s0)
+
+/var/log/ceilometer(/.*)?     gen_context(system_u:object_r:ceilometer_log_t,s0)

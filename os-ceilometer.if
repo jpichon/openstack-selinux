@@ -1,0 +1,20 @@
+#######################################
+## <summary>
+##  Creates types and rules for a basic
+##  openstack-ceilometer systemd daemon domain.
+## </summary>
+## <param name="prefix">
+##  <summary>
+##  Prefix for the domain.
+##  </summary>
+## </param>
+#
+template(`ceilometer_domain_template',`
+    gen_require(`
+        attribute ceilometer_domain;
+    ')
+
+    type ceilometer_$1_t, ceilometer_domain;
+    type ceilometer_$1_exec_t;
+    init_daemon_domain(ceilometer_$1_t, ceilometer_$1_exec_t)
+')
